@@ -10,7 +10,7 @@ Created on Wed May 23 12:49:56 2018
 
 import os
 # Open a file
-path = "/home/drugo/pyModis/scripts/tryTheMimmo"
+path = "/home/drugo/pyModis/scripts/"
 dirs = os.listdir( path )
 
 # This would print all the files and directories
