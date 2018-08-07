@@ -10,7 +10,11 @@ Created on Wed May 23 12:49:56 2018
 
 import os
 # Open a file
+<<<<<<< HEAD
 path = "/home/drugo/pyModis/scripts/lst_terra"
+=======
+path = "/home/drugo/pyModis/scripts/"
+>>>>>>> 5bcec9ee045491f927f7bfb5d4af1df66fa4547d
 dirs = os.listdir( path )
 
 # This would print all the files and directories
