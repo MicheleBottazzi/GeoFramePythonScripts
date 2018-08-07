@@ -3,40 +3,62 @@
 """
 Created on Tue May 29 11:44:58 2018
 
-@author: drugo
+@author: Michele Bottazzi
+@mail michele.bottazzi@gmail.com
 """
 
 # LEGGO I FILE   
 
+############################################
+#####     First part of the script     #####
+#  Cut a raster.asc using shapefile masks  #
+###    Save the cutted raster as .tif    ###
+############################################
+
 import os
 # Open a file
-path = "/home/drugo/Sim/prova"
-dirs = os.listdir( path )
-pathOut = "/home/drugo/Sim/prova"
-
+path = "/home/drugo/GeoFramePythonScripts/EstraiRaster/InputFolder"                # Inut folder
+dirs = os.listdir( path )           # Set the current directory as the input folder
+pathOut = "/home/drugo/GeoFramePythonScripts/EstraiRaster/OutputFolder"            # Output folder
+listOfTheFiles ="subbasin5000_ID"   # Name of the mask shapefile
+xresolution="30.005356186395"         # resolution of raster
+yresolution="30.005356186395"         # resolution of raster
+rasterFileInput = 'DEM'             # Name of the raster
 
     
 import glob
-filesSHP=glob.glob("/home/drugo/Sim/prova/subbasin*.shp")
+filesSHP=glob.glob(path+'/'+listOfTheFiles+'*.shp')
 for fileSHP in filesSHP:        
-    print(fileSHP)
+    #print(fileSHP)
     fileHDFinput = fileSHP
-    fileTIFoutput = fileHDFinput.replace('subbasins_A_DN', 'DEM')
+    fileTIFoutput = fileHDFinput.replace(path, pathOut)
+    fileTIFoutput = fileTIFoutput.replace(listOfTheFiles, rasterFileInput)
     fileTIFoutput = fileTIFoutput.replace('.shp', '.tif')
     first = 'gdalwarp -q -cutline '
     second = fileHDFinput
-    third = ' -crop_to_cutline -tr 30.0053561864 30.0053561864 -of GTiff '
-    fourth = '/home/drugo/Sim/prova/DEM_bacino_A.asc '
+    third = ' -crop_to_cutline -tr '+xresolution+' '+yresolution+' -of GTiff '
+    fourth = path+'/'+rasterFileInput+'.asc '
     fifth = fileTIFoutput
-    stringToLaunch=first+second+third+fourth+fifth
+    stringToLaunch='sudo '+first+second+third+fourth+fifth
+    print(stringToLaunch)
     os.system(stringToLaunch)
     
 
-filesTIF=glob.glob("/home/drugo/Sim/prova/*.tif")    
+
+
+############################################
+###     Second part of the script        ###
+###  Convert output file of the previous ###
+#####      script from .tif to .asc    #####
+############################################
+
+filesTIF=glob.glob(pathOut+"/*.tif")    
 for fileTIF in filesTIF:        
     fileHDFoutput = fileSHP
     fileHDFoutput = fileTIF.replace('.tif', '.asc')
     first = 'gdal_translate -of AAIGrid '
    
-    stringToLaunchII=first+fileTIF+' '+fileHDFoutput
-    os.system(stringToLaunchII)
+    stringToLaunchII='sudo '+first+fileTIF+' '+fileHDFoutput
+    print(stringToLaunchII)
+
+    #os.system(stringToLaunchII)

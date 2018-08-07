@@ -11,17 +11,19 @@ import csv
 DBpath='/home/drugo/Downloads/NewAgeDB.sqlite'
 
 ## maschera di bacino da caricare
-mask="MaskBacino2"
+mask="a_meledrio"
 
 ## buffer dalla maschera di bacino [m]
-buff ="20000"
+buff ="50000"
 
 # variable meteo: Precipitazione 2, Temperatura 6, Umidita Relativa 8, Radiazione 13, Velocita Vento 7
 #var=['TA','RH','PREC','RAD']
 #var=['PREC','TA','RAD','RH']
-var=['PREC']
+var=['FLOW','PRP','PRES','TA','WIND','RH','RAD']
+#var=['PRES','WIND','RH','RAD']
+
 ## periodo
-t_start="2007-01-01 00:00:00"
+t_start="1994-01-01 00:00:00"
 t_end="2008-12-31 23:00:00"
 # timestep
 #tstep=60
@@ -35,15 +37,16 @@ cur = conn.cursor()
 
 pm_ids=[]
 #dict = {'PREC':'2', 'TA':'6', 'RH':'8', 'RAD':'13', 'HS':'10'}
-dict = {'PREC':'2'}
+
+dict = {'FLOW':'0','PRP':'2','PRES':'4','TA':'6','WIND':'7', 'RH':'8', 'RAD':'13'}
 for v in var:
 	print "############ ", v, " ##############"
 
 	# selezione punti di monitoraggio
 	q_pm="SELECT p.id FROM " + mask + " a, punti_monitoraggio p \
 	WHERE ST_Intersects(a.geom, ST_Buffer(p.the_geom," + buff + ")) \
-	AND p.tipologia_nodi_id IN (2,3,6,7,15,17)"
-
+	AND p.tipologia_nodi_id IN (0,2,4,6,7,8,13)"
+#AND p.tipologia_nodi_id IN (2,3,6,7,15,17)"
 
 #	AND p.tipologia_nodi_id IN (2,7,15,17,18)"
 	
